@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class FoodCart extends Model
 {
     use HasFactory;
+    public $table = 'foods_carts';
 }

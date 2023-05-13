@@ -12,6 +12,6 @@ class FoodCartSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        \App\Models\FoodCart::factory(50)->create();
     }
 }

@@ -12,6 +12,6 @@ class OrderAddressSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        \App\Models\OrderAddress::factory(10)->create();
     }
 }

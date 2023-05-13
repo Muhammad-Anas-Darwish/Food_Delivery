@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Cart;
+use App\Models\Food;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,9 @@ class FoodCartFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'cart_id' => $this->faker->randomElement(Cart::pluck('id')),
+            'food_id' => $this->faker->randomElement(Food::pluck('id')),
+            'quantity' => $this->faker->randomNumber(),
         ];
     }
 }

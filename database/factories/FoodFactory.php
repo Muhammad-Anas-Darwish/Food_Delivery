@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,11 @@ class FoodFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => $this->faker->name(),
+            'price' => $this->faker->numberBetween(5000, 70000),
+            'is_active' => $this->faker->boolean(),
+            'category_id' => $this->faker->randomElement(Category::pluck('id')),
+            'description' => $this->faker->text(),
         ];
     }
 }
