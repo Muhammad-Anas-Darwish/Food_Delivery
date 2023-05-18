@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CountryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\CategoryController;
@@ -34,11 +35,20 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('/profile', [ProfileController::class, 'show']);
 });
 
-// // Category routess
+// Category routess
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/{slug}', [CategoryController::class, 'show']);
 Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
-    Route::get('/categories', [CategoryController::class, 'index']);
     Route::post('/categories', [CategoryController::class, 'store']);
-    Route::get('/categories/{slug}', [CategoryController::class, 'show']);
     Route::put('/categories/{slug}', [CategoryController::class, 'update']);
     Route::delete('/categories/{slug}', [CategoryController::class, 'destroy']);
+});
+
+// Country routess
+Route::get('/countries', [CountryController::class, 'index']);
+Route::get('/countries/{id}', [CountryController::class, 'show']);
+Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
+    Route::post('/countries', [CountryController::class, 'store']);
+    Route::put('/countries/{id}', [CountryController::class, 'update']);
+    Route::delete('/countries/{id}', [CountryController::class, 'destroy']);
 });

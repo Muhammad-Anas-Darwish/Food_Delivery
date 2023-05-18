@@ -31,11 +31,11 @@ class CategoryController extends Controller
             return response()->json(['error' => $validator->errors()], 401);
         }
 
-        $profile = Category::create([
+        $category = Category::create([
             'title' => $request["title"],
         ]);
 
-        return response()->json(['success' => $profile], 201);
+        return response()->json(['success' => $category], 201);
     }
 
     /**
