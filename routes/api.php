@@ -7,6 +7,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,4 +52,13 @@ Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
     Route::post('/countries', [CountryController::class, 'store']);
     Route::put('/countries/{id}', [CountryController::class, 'update']);
     Route::delete('/countries/{id}', [CountryController::class, 'destroy']);
+});
+
+// City routess
+Route::get('/cities', [CityController::class, 'index']);
+Route::get('/cities/{id}', [CityController::class, 'show']);
+Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
+    Route::post('/cities', [CityController::class, 'store']);
+    Route::put('/cities/{id}', [CityController::class, 'update']);
+    Route::delete('/cities/{id}', [CityController::class, 'destroy']);
 });

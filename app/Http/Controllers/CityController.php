@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CityController extends Controller
 {
@@ -12,15 +13,8 @@ class CityController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $cities = City::all();
+        return response()->json(['success', $cities], 200);
     }
 
     /**
@@ -28,38 +22,50 @@ class CityController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:32',
+            'country_id' => 'required|exists:countries,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+
+        $city = City::create([
+            'title' => $request['title'],
+            'country_id' => $request['country_id'],
+        ]);
+
+        return response()->json(['success' => $city], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(City $city)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(City $city)
-    {
-        //
+        $city = City::find($id);
+        return response()->json(['success' => $city], 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, City $city)
+    public function update(Request $request, $id)
     {
-        //
+        $city = City::find($id);
+        $city['title'] = $request['title'];
+        $city['country_id'] = $request['country_id'];
+        $city->save();
+        return response(['success' => $city], 201);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(City $city)
+    public function destroy($id)
     {
-        //
+        $city = City::find($id)->delete();
+        return response()->json(['success' => $city], 202);
     }
 }
