@@ -3,11 +3,12 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\FoodController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\CityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,4 +62,13 @@ Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
     Route::post('/cities', [CityController::class, 'store']);
     Route::put('/cities/{id}', [CityController::class, 'update']);
     Route::delete('/cities/{id}', [CityController::class, 'destroy']);
+});
+
+// Food routess
+Route::get('/foods', [FoodController::class, 'index']);
+Route::get('/foods/{slug}', [FoodController::class, 'show']);
+Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
+    Route::post('/foods', [FoodController::class, 'store']);
+    Route::put('/foods/{slug}', [FoodController::class, 'update']);
+    Route::delete('/foods/{slug}', [FoodController::class, 'destroy']);
 });

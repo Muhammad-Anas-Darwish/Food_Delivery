@@ -57,7 +57,7 @@ class CityController extends Controller
         $city['title'] = $request['title'];
         $city['country_id'] = $request['country_id'];
         $city->save();
-        return response(['success' => $city], 201);
+        return response()->json(['success' => $city], 201);
     }
 
     /**

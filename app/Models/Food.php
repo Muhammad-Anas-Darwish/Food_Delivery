@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Food extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'slug', 'price', 'is_active', 'category_id', 'description'];
+    protected $fillable = ['title', 'price', 'is_active', 'description', 'category_id'];
+    protected $with = ['category'];
     public $table = 'foods';
 
     /**
@@ -20,9 +22,9 @@ class Food extends Model
     {
         parent::boot();
 
-        static::created(function ($category) {
-            $category->slug = $category->createSlug($category->title);
-            $category->save();
+        static::created(function ($food) {
+            $food->slug = $food->createSlug($food->title);
+            $food->save();
         });
     }
 
@@ -46,5 +48,10 @@ class Food extends Model
         }
 
         return $slug;
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 }
