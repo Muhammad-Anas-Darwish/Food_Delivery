@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -12,54 +14,40 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $carts = Cart::all();
+        return response()->json(['success', $carts], 200);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        $user = Auth::user();
+
+        $cart = Cart::firstOrCreate([
+            'user_id' => $user['id'],
+            'been_ordered' => false,
+        ]);
+
+        if ($cart->wasRecentlyCreated) {
+            return response()->json(['message' => 'Item created successfully'], 201);
+        } else {
+            return response()->json(['message' => 'The item already exists!'], 409);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Cart $cart)
+    public function show()
     {
-        //
-    }
+        $user = Auth::user();
+        $cart = Cart::firstWhere(['user_id' => $user['id'], 'been_ordered' => false]);
+        if ($cart === null)
+            return response()->json(['error' => "There is no cart!"], 404);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Cart $cart)
-    {
-        //
+        $cart = $cart->orderBy('created_at', 'desc')->get()->first();
+        return response()->json(['success' => $cart], 200);
     }
 }

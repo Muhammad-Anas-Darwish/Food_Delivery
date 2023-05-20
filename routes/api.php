@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\CountryController;
@@ -37,7 +37,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('/profile', [ProfileController::class, 'show']);
 });
 
-// Category routess
+// Category routes
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{slug}', [CategoryController::class, 'show']);
 Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
@@ -46,7 +46,7 @@ Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
     Route::delete('/categories/{slug}', [CategoryController::class, 'destroy']);
 });
 
-// Country routess
+// Country routes
 Route::get('/countries', [CountryController::class, 'index']);
 Route::get('/countries/{id}', [CountryController::class, 'show']);
 Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
@@ -55,7 +55,7 @@ Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
     Route::delete('/countries/{id}', [CountryController::class, 'destroy']);
 });
 
-// City routess
+// City routes
 Route::get('/cities', [CityController::class, 'index']);
 Route::get('/cities/{id}', [CityController::class, 'show']);
 Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
@@ -64,11 +64,20 @@ Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
     Route::delete('/cities/{id}', [CityController::class, 'destroy']);
 });
 
-// Food routess
+// Food routes
 Route::get('/foods', [FoodController::class, 'index']);
 Route::get('/foods/{slug}', [FoodController::class, 'show']);
 Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
     Route::post('/foods', [FoodController::class, 'store']);
     Route::put('/foods/{slug}', [FoodController::class, 'update']);
     Route::delete('/foods/{slug}', [FoodController::class, 'destroy']);
+});
+
+// Cart routes
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::post('/carts', [CartController::class, 'store']);
+    Route::get('/carts/my_cart', [CartController::class, 'show']);
+});
+Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
+    Route::get('/carts', [CartController::class, 'index']);
 });
