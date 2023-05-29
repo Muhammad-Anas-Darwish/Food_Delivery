@@ -9,6 +9,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FoodCartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,9 +76,20 @@ Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
 
 // Cart routes
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::post('/carts', [CartController::class, 'store']);
+    // Route::get('/carts', [CartController::class, 'index']);
     Route::get('/carts/my_cart', [CartController::class, 'show']);
+    Route::post('/carts', [CartController::class, 'store']);
 });
+
+// Food Cart routes
+// Route::get('/food_carts/my_cart', [FoodCartController::class, 'show']);
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('/food_carts', [FoodCartController::class, 'getCartItems']);
+    Route::post('/food_carts', [FoodCartController::class, 'store']);
+    Route::put('/food_carts/{id}', [FoodCartController::class, 'update']);
+    Route::delete('/food_carts/{id}', [FoodCartController::class, 'destroy']);
+});
+
 Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
-    Route::get('/carts', [CartController::class, 'index']);
+
 });
