@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\City;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,6 +22,7 @@ class OrderAddressFactory extends Factory
             'address_line' => $this->faker->address(),
             'mobile_phone' => $this->faker->phoneNumber(),
             'city_id' => $this->faker->randomElement(City::pluck('id')),
+            'user_id' => $this->faker->randomElement(User::pluck('id')),
         ];
     }
 }
