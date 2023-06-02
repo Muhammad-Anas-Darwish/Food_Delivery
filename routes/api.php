@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\API\UserController;
@@ -91,6 +92,24 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::delete('/food_carts/{id}', [FoodCartController::class, 'destroy']);
 });
 
-Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
+// Order Address routes
+// Route::group(['middleware' => 'auth:api'], function() {
+//     Route::get('/order_addresses/{slug}', [OrderAddressController::class, 'show']);
+//     Route::post('/order_addresses', [OrderAddressController::class, 'store']);
+// });
 
+// Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
+//     Route::get('/order_addresses', [OrderAddressController::class, 'index']);
+// });
+
+// Order routes
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('/orders', [OrderController::class, 'getOrders']);
+    Route::post('/orders', [OrderController::class, 'store']);
 });
+
+Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::put('/orders/{id}', [OrderController::class, 'update']);
+});
+
