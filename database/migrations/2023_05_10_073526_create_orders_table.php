@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('address_id')->references('id')->on('orders_addresses');
             $table->unsignedBigInteger('cart_id');
             $table->foreign('cart_id')->references('id')->on('carts');
-            $table->boolean('has_been_received');
+            $table->boolean('has_been_received')->default(0);
             $table->double('total');
             $table->timestamps();
         });

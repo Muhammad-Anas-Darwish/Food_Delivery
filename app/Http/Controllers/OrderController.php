@@ -16,7 +16,7 @@ class OrderController extends Controller
     {
         $user = Auth::user();
         $orders = Order::where('user_id', $user['id']);
-        return response()->json(['success' => $orders], 200);
+        return response()->json(['data' => $orders], 200);
     }
 
     /**
@@ -25,15 +25,7 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::all();
-        return response()->json(['success' => $orders], 200);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        return response()->json(['data' => $orders], 200);
     }
 
     /**
@@ -52,6 +44,6 @@ class OrderController extends Controller
         $order = Order::firstWhere('id', $id);
         $order['has_been_received'] = $request['has_been_received'];
         $order->save();
-        return response()->json(['success' => $order, 'message' => 'order updated successfully'], 201);
+        return response()->json(['data' => $order, 'message' => 'Order updated successfully'], 201);
     }
 }

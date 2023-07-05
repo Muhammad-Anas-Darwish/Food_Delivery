@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('orders_addresses', function (Blueprint $table) {
             $table->id();
-            $table->string('address_line');
+            $table->string('address_line', 191);
             $table->string('mobile_phone', 18);
             $table->timestamps();
         });

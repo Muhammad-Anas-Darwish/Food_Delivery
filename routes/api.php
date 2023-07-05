@@ -12,6 +12,7 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FoodCartController;
 use App\Http\Controllers\OrderAddressController;
+use App\Http\Controllers\PayPalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,8 +29,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('login', [UserController::class, 'login']);
-Route::post('register', [UserController::class, 'register']);
+Route::post('login', [UserController::class, 'login'])->name('login');
+Route::post('register', [UserController::class, 'register'])->name('register');
 Route::group(['middleware' => 'auth:api'], function(){
     Route::post('details', [UserController::class, 'details']);
 });
@@ -84,7 +85,6 @@ Route::group(['middleware' => 'auth:api'], function() {
 });
 
 // Food Cart routes
-// Route::get('/food_carts/my_cart', [FoodCartController::class, 'show']);
 Route::group(['middleware' => 'auth:api'], function() {
     Route::get('/food_carts', [FoodCartController::class, 'getCartItems']);
     Route::post('/food_carts', [FoodCartController::class, 'store']);
@@ -93,10 +93,10 @@ Route::group(['middleware' => 'auth:api'], function() {
 });
 
 // Order Address routes
-// Route::group(['middleware' => 'auth:api'], function() {
-//     Route::get('/order_addresses/{slug}', [OrderAddressController::class, 'show']);
-//     Route::post('/order_addresses', [OrderAddressController::class, 'store']);
-// });
+Route::group(['middleware' => 'auth:api'], function() {
+    // Route::get('/order_addresses/{slug}', [OrderAddressController::class, 'show']);
+    Route::post('/order_addresses', [OrderAddressController::class, 'store']);
+});
 
 // Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
 //     Route::get('/order_addresses', [OrderAddressController::class, 'index']);
@@ -105,7 +105,6 @@ Route::group(['middleware' => 'auth:api'], function() {
 // Order routes
 Route::group(['middleware' => 'auth:api'], function() {
     Route::get('/orders', [OrderController::class, 'getOrders']);
-    Route::post('/orders', [OrderController::class, 'store']);
 });
 
 Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
@@ -113,3 +112,11 @@ Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
     Route::put('/orders/{id}', [OrderController::class, 'update']);
 });
 
+/**
+ * PyaPal Routes
+ */
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('process-transaction', [PayPalController::class, 'processTransaction'])->name('processTransaction');
+    Route::get('success-transaction', [PayPalController::class, 'successTransaction'])->name('successTransaction');
+    Route::get('cancel-transaction', [PayPalController::class, 'cancelTransaction'])->name('cancelTransaction');
+});

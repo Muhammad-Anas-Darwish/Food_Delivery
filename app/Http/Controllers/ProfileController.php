@@ -28,7 +28,7 @@ class ProfileController extends Controller
             'number_mobile' => $request["number_mobile"]
         ]);
 
-        return response()->json(['success' => $profile], 201);
+        return response()->json(['message' => 'Profile created successfully', 'data' => $profile], 201);
     }
 
     /**
@@ -38,7 +38,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $profile = Profile::all()->where('user_id', '=', $user['id']);
-        return response()->json(['success' => $profile], 200);
+        return response()->json(['data' => $profile], 200);
     }
 
     /**
@@ -50,6 +50,6 @@ class ProfileController extends Controller
         $profile = Profile::all()->where('user_id', '=', $user['id'])->first();
         $profile['number_mobile'] = $request['number_mobile'];
         $profile->save();
-        return response()->json(['success' => $profile], 201);
+        return response()->json(['message' => 'Profile updated successfully', 'data' => $profile], 201);
     }
 }

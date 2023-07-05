@@ -26,7 +26,7 @@ class FoodCartController extends Controller
         // Get all food items in the last cart and their quantities
         $food_cart_items = FoodCart::where('cart_id', $cart->id)->with('food')->get();
 
-        return response()->json(['success' => $food_cart_items], 200);
+        return response()->json(['data' => $food_cart_items], 200);
     }
 
     /**
@@ -66,7 +66,7 @@ class FoodCartController extends Controller
                 'quantity' => $request['quantity'],
             ]);
         }
-        return response()->json(['message' => 'Food cart item created successfully', 'success' => $food_cart_item], 201);
+        return response()->json(['message' => 'Food cart item created successfully', 'data' => $food_cart_item], 201);
     }
 
     /**
@@ -94,12 +94,12 @@ class FoodCartController extends Controller
 
         if ($food_cart_item['quantity'] <= 0) { // if quantity is negative delete food_cart_item
             $food_cart_item->delete();
-            return response()->json(['faild' => $food_cart_item, 'message' => 'no quantity in this food cart!'], 202);
+            return response()->json(['data' => $food_cart_item, 'message' => 'no quantity in this food cart!'], 202);
         }
 
         $food_cart_item->save();
 
-        return response()->json(['succeess' => $food_cart_item], 201);
+        return response()->json(['message' => 'Food cart updated successfully', 'data' => $food_cart_item], 201);
     }
 
     /**
@@ -116,6 +116,6 @@ class FoodCartController extends Controller
         // Get food item in the last cart and their quantitiy
         $food_cart_item = FoodCart::firstWhere(['id' => $id, 'cart_id' => $cart->id])->delete();
 
-        return response()->json(['succeess' => $food_cart_item], 202);
+        return response()->json(['message' => 'Food cart deleted successfully', 'data' => $food_cart_item], 202);
     }
 }

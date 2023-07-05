@@ -14,8 +14,9 @@ class CartController extends Controller
      */
     public function index()
     {
-        $carts = Cart::all();
-        return response()->json(['success', $carts], 200);
+        // $carts = Cart::all();
+        $carts = Cart::paginate(18);
+        return response()->json(['data', $carts], 200);
     }
 
     /**
@@ -31,9 +32,9 @@ class CartController extends Controller
         ]);
 
         if ($cart->wasRecentlyCreated) {
-            return response()->json(['message' => 'Item created successfully'], 201);
+            return response()->json(['message' => 'Cart created successfully'], 201);
         } else {
-            return response()->json(['message' => 'The item already exists!'], 409);
+            return response()->json(['message' => 'The cart already exists!'], 409);
         }
     }
 
@@ -48,6 +49,6 @@ class CartController extends Controller
             return response()->json(['error' => "There is no cart!"], 404);
 
         $cart = $cart->orderBy('created_at', 'desc')->get()->first();
-        return response()->json(['success' => $cart], 200);
+        return response()->json(['data' => $cart], 200);
     }
 }

@@ -9,4 +9,9 @@ class Country extends Model
 {
     use HasFactory;
     public $fillable = ['title'];
+
+    public function cities()
+    {
+        return $this->belongsTo(City::class, 'id');
+    }
 }

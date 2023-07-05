@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PayPalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+/**
+ * Checkout Routes
+ */
+Route::group(['middleware' => 'auth:api'], function() {
+    Route::get('trans', function () {
+        return view('paywithpaypal');
+    })->name('createTransaction');
+});
+

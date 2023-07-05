@@ -14,7 +14,7 @@ class CityController extends Controller
     public function index()
     {
         $cities = City::all();
-        return response()->json(['success', $cities], 200);
+        return response()->json(['data', $cities], 200);
     }
 
     /**
@@ -36,7 +36,7 @@ class CityController extends Controller
             'country_id' => $request['country_id'],
         ]);
 
-        return response()->json(['success' => $city], 201);
+        return response()->json(['message' => 'City created successfully', 'data' => $city], 201);
     }
 
     /**
@@ -45,7 +45,7 @@ class CityController extends Controller
     public function show($id)
     {
         $city = City::find($id);
-        return response()->json(['success' => $city], 200);
+        return response()->json(['data' => $city], 200);
     }
 
     /**
@@ -57,7 +57,7 @@ class CityController extends Controller
         $city['title'] = $request['title'];
         $city['country_id'] = $request['country_id'];
         $city->save();
-        return response()->json(['success' => $city], 201);
+        return response()->json(['message' => 'City updated successfully', 'data' => $city], 201);
     }
 
     /**
@@ -66,6 +66,6 @@ class CityController extends Controller
     public function destroy($id)
     {
         $city = City::find($id)->delete();
-        return response()->json(['success' => $city], 202);
+        return response()->json(['message' => 'City deleted successfully', 'data' => $city], 202);
     }
 }

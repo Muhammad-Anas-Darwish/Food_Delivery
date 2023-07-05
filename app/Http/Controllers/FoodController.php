@@ -13,8 +13,10 @@ class FoodController extends Controller
      */
     public function index()
     {
-        $foods = Food::all();
-        return response()->json(['success', $foods], 200);
+        // $foods = Food::all();
+        $foods = Food::paginate(18);
+        // $foods = Food::query();
+        return response()->json(['data' => $foods], 200);
     }
 
     /**
@@ -41,7 +43,7 @@ class FoodController extends Controller
             'category_id' => $request['category_id'],
         ]);
 
-        return response()->json(['success', $food], 201);
+        return response()->json(['message' => 'Food stored successfully', 'data' => $food], 201);
     }
 
     /**
@@ -50,7 +52,7 @@ class FoodController extends Controller
     public function show($slug)
     {
         $food = Food::firstWhere('slug', $slug);
-        return response(['success', $food], 200);
+        return response(['data', $food], 200);
     }
 
     /**
@@ -59,7 +61,7 @@ class FoodController extends Controller
     public function update(Request $request, $slug)
     {
         $food = Food::firstWhere('slug', $slug)->update($request->all());
-        return response()->json(['success', $food], 201);
+        return response()->json(['message' => 'Food updated successfully', 'data' => $food], 201);
     }
 
     /**
@@ -68,6 +70,6 @@ class FoodController extends Controller
     public function destroy($slug)
     {
         $food = Food::firstWhere('slug', $slug)->delete();
-        return response()->json(['success' => $food], 202);
+        return response()->json(['message' => 'Food deleted successfully', 'data' => $food], 202);
     }
 }

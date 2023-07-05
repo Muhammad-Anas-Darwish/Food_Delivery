@@ -12,6 +12,7 @@ class Order extends Model
     public $table = 'orders';
 
     public $with = ['cart', 'address'];
+    protected $fillable = ['user_id', 'address_id', 'cart_id', 'has_been_received', 'total'];
 
     public function cart(): BelongsTo
     {

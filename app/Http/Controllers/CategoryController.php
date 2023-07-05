@@ -15,7 +15,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return response()->json(['success' => $categories], 200);
+        return response()->json(['data' => $categories], 200);
     }
 
     /**
@@ -35,7 +35,7 @@ class CategoryController extends Controller
             'title' => $request["title"],
         ]);
 
-        return response()->json(['success' => $category], 201);
+        return response()->json(['message' => 'Category stored successfully', 'data' => $category], 201);
     }
 
     /**
@@ -56,7 +56,7 @@ class CategoryController extends Controller
         $category = Category::firstWhere('slug', $slug);
         $category['title'] = $request['title'];
         $category->save();
-        return response()->json(['success' => $category], 201);
+        return response()->json(['message' => 'Category updated successfully', 'data' => $category], 201);
     }
 
     /**
@@ -65,6 +65,6 @@ class CategoryController extends Controller
     public function destroy($slug)
     {
         $category = Category::firstWhere('slug', $slug)->delete();
-        return response()->json(['success' => $category], 202);
+        return response()->json(['message' => 'Category deleted successfully', 'data' => $category], 202);
     }
 }
