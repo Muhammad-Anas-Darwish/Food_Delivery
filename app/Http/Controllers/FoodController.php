@@ -51,6 +51,15 @@ class FoodController extends Controller
      */
     public function show($slug)
     {
+        // Validate the slug
+        $validator = Validator::make(['slug' => $slug], [
+            'slug' => 'required|exists:foods,slug'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+        
         $food = Food::firstWhere('slug', $slug);
         return response(['data', $food], 200);
     }
@@ -86,6 +95,15 @@ class FoodController extends Controller
      */
     public function destroy($slug)
     {
+        // Validate the slug
+        $validator = Validator::make(['slug' => $slug], [
+            'slug' => 'required|exists:foods,slug'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
         $food = Food::firstWhere('slug', $slug)->delete();
         return response()->json(['message' => 'Food deleted successfully', 'data' => $food], 202);
     }

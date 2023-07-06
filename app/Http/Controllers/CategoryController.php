@@ -44,6 +44,15 @@ class CategoryController extends Controller
      */
     public function show($slug)
     {
+        // Validate the slug
+        $validator = Validator::make(['slug' => $slug], [
+            'slug' => 'required|exists:categories,slug'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
         $category = Category::firstWhere('slug', $slug);
         return response()->json($category, 200);
         // return response()->json(compact('category'), 200);
@@ -54,6 +63,23 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $slug)
     {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        // Validate the slug
+        $validator = Validator::make(['slug' => $slug], [
+            'slug' => 'required|exists:categories,slug'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
         $category = Category::firstWhere('slug', $slug);
         $category['title'] = $request['title'];
         $category->save();
@@ -65,6 +91,15 @@ class CategoryController extends Controller
      */
     public function destroy($slug)
     {
+        // Validate the slug
+        $validator = Validator::make(['slug' => $slug], [
+            'slug' => 'required|exists:categories,slug'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
         $category = Category::firstWhere('slug', $slug)->delete();
         return response()->json(['message' => 'Category deleted successfully', 'data' => $category], 202);
     }
