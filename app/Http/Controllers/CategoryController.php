@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class CategoryController extends Controller
 {
