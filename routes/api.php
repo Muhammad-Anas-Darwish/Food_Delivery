@@ -37,8 +37,8 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 // Profile routes
 Route::group(['middleware' => 'auth:api'], function() {
-    Route::post('/profile', [ProfileController::class, 'store']);
     Route::get('/profile', [ProfileController::class, 'show']);
+    Route::put('/profile', [ProfileController::class, 'update']);
 });
 
 // Category routes

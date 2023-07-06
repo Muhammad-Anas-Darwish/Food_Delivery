@@ -32,7 +32,7 @@ class FoodController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
+            return response()->json(['error' => $validator->errors()], 400);
         }
 
         $food = Food::create([
@@ -60,6 +60,23 @@ class FoodController extends Controller
      */
     public function update(Request $request, $slug)
     {
+        $validator = Validator::make($request->all(), [
+            'category_id' => 'exists:categories,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        // Validate the slug
+        $validator = Validator::make(['slug' => $slug], [
+            'slug' => 'required|exists:foods,slug'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
         $food = Food::firstWhere('slug', $slug)->update($request->all());
         return response()->json(['message' => 'Food updated successfully', 'data' => $food], 201);
     }

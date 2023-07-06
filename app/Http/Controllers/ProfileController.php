@@ -10,28 +10,6 @@ use Illuminate\Support\Facades\Validator;
 class ProfileController extends Controller
 {
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $user = Auth::user();
-        $validator = Validator::make($request->all(), [
-            'number_mobile' => 'required|numeric|min:10',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
-        }
-
-        $profile = Profile::create([
-            'user_id' => $user['id'],
-            'number_mobile' => $request["number_mobile"]
-        ]);
-
-        return response()->json(['message' => 'Profile created successfully', 'data' => $profile], 201);
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show()
