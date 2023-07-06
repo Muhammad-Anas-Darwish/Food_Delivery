@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Food;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class FoodController extends Controller
@@ -11,12 +12,28 @@ class FoodController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // $foods = Food::all();
-        $foods = Food::paginate(18);
-        // $foods = Food::query();
-        return response()->json(['data' => $foods], 200);
+        $foods = Food::where('is_active', '=', 1);
+
+        // Apply filters if provided
+        if ($request->has('filter')) {
+            $filters = $request->get('filter');
+
+            // Apply individual filters
+            if (isset($filters['title'])) {
+                $foods = $foods->where('title', 'like', '%' . $filters['title'] . '%')
+                    ->orWhere('description', 'like', '%' . $filters['title'] . '%');
+            }
+            if (isset($filters['price'])) {
+                $foods = $foods->where('price', '>=', $filters['price']);
+            }
+            if (isset($filters['category_id'])) {
+                $foods = $foods->where('category_id', '=', $filters['category_id']);
+            }
+        }
+
+        return response()->json($foods->paginate(18), 200);
     }
 
     /**
@@ -59,7 +76,7 @@ class FoodController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-        
+
         $food = Food::firstWhere('slug', $slug);
         return response(['data', $food], 200);
     }
