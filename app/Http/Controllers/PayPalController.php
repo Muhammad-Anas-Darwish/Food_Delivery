@@ -27,7 +27,7 @@ class PayPalController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
+            return response()->json(['error' => $validator->errors()], 400);
         }
 
         // get cart for user not ordered
