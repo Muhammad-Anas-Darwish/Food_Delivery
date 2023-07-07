@@ -13,7 +13,7 @@ class Food extends Model
     use HasFactory;
     use Sluggable;
 
-    protected $fillable = ['title', 'price', 'is_active', 'description', 'category_id'];
+    protected $fillable = ['title', 'price', 'is_active', 'description', 'category_id', 'image'];
     protected $with = ['category'];
     public $table = 'foods';
 

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Food;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class FoodController extends Controller
@@ -46,11 +45,15 @@ class FoodController extends Controller
             'price' => 'required',
             'description' => 'required',
             'category_id' => 'required|exists:categories,id',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
+
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('images'), $imageName);
 
         $food = Food::create([
             'title' => $request['title'],
@@ -58,6 +61,7 @@ class FoodController extends Controller
             'is_active' => $request['is_active'],
             'description' => $request['description'],
             'category_id' => $request['category_id'],
+            'image' => $imageName,
         ]);
 
         return response()->json(['message' => 'Food stored successfully', 'data' => $food], 201);

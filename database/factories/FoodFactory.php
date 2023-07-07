@@ -23,6 +23,7 @@ class FoodFactory extends Factory
             'is_active' => $this->faker->boolean(),
             'category_id' => $this->faker->randomElement(Category::pluck('id')),
             'description' => $this->faker->text(),
+            'image' => $this->faker->image(),
         ];
     }
 }
