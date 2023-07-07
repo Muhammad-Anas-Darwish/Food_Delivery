@@ -78,9 +78,11 @@ Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
 });
 
 // Cart routes
+Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
+    Route::get('/carts', [CartController::class, 'index']);
+});
 Route::group(['middleware' => 'auth:api'], function() {
-    // Route::get('/carts', [CartController::class, 'index']);
-    Route::get('/carts/my_cart', [CartController::class, 'show']);
+    Route::get('/carts/my_cart', [CartController::class, 'getMyCart']);
     Route::post('/carts', [CartController::class, 'store']);
 });
 

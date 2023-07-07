@@ -10,13 +10,24 @@ use Illuminate\Support\Facades\Validator;
 class CartController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the carts has been ordered.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // $carts = Cart::all();
-        $carts = Cart::paginate(18);
-        return response()->json(['data', $carts], 200);
+        $carts = Cart::where('been_ordered', 1);
+
+        if ($request->has('filter')) {
+            $filters = $request->get('filter');
+
+            // Apply individual filters
+            if (isset($filters['has_been_received'])) {
+                $carts = $carts->whereHas('order', function ($query) use($filters) {
+                    $query->where('has_been_received', $filters['has_been_received']);
+                });
+            }
+        }
+
+        return response()->json($carts->paginate(24), 200);
     }
 
     /**
@@ -41,7 +52,7 @@ class CartController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show()
+    public function getMyCart()
     {
         $user = Auth::user();
         $cart = Cart::firstWhere(['user_id' => $user['id'], 'been_ordered' => false]);

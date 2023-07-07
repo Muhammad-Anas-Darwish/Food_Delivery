@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Cart extends Model
 {
@@ -14,9 +15,20 @@ class Cart extends Model
     public $fillable = ['user_id', 'been_ordered'];
     public $with = ['user'];
 
+    /**
+     * The users that belong to the cart.
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * The Order of cart
+     */
+    public function order(): HasOne
+    {
+        return $this->hasOne(Order::class);
     }
 
     /**
