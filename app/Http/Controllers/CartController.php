@@ -55,11 +55,8 @@ class CartController extends Controller
     public function getMyCart()
     {
         $user = Auth::user();
-        $cart = Cart::firstWhere(['user_id' => $user['id'], 'been_ordered' => false]);
-        if ($cart === null)
-            return response()->json(['error' => "There is no cart!"], 404);
+        $cart = Cart::firstOrCreate(['user_id' => $user['id'], 'been_ordered' => false]);
 
-        $cart = $cart->orderBy('created_at', 'desc')->get()->first();
         return response()->json(['data' => $cart], 200);
     }
 }

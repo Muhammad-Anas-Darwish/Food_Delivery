@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
 class CityController extends Controller
@@ -45,6 +46,11 @@ class CityController extends Controller
     public function show($id)
     {
         $city = City::find($id);
+
+        if ($city === null) {
+            return response()->json(['error' => "City not found"], Response::HTTP_NOT_FOUND);
+        }
+
         return response()->json(['data' => $city], 200);
     }
 
@@ -53,7 +59,21 @@ class CityController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'country_id' => 'required|exists:countries,id'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
         $city = City::find($id);
+
+        if ($city === null) {
+            return response()->json(['error' => "City not found"], Response::HTTP_NOT_FOUND);
+        }
+
         $city['title'] = $request['title'];
         $city['country_id'] = $request['country_id'];
         $city->save();
@@ -65,7 +85,13 @@ class CityController extends Controller
      */
     public function destroy($id)
     {
-        $city = City::find($id)->delete();
-        return response()->json(['message' => 'City deleted successfully', 'data' => $city], 202);
+        $city = City::find($id);
+
+        if ($city === null) {
+            return response()->json(['error' => "City not found"], Response::HTTP_NOT_FOUND);
+        }
+
+        $city->delete();
+        return response()->json(['message' => 'City deleted successfully'], 202);
     }
 }

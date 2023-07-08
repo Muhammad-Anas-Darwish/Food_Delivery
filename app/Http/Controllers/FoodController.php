@@ -78,7 +78,7 @@ class FoodController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return response()->json(['error' => $validator->errors()], 404);
         }
 
         $food = Food::firstWhere('slug', $slug);
@@ -95,7 +95,7 @@ class FoodController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return response()->json(['error' => $validator->errors()], 404);
         }
 
         // Validate the slug
@@ -122,7 +122,7 @@ class FoodController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return response()->json(['error' => $validator->errors()], 404);
         }
 
         $food = Food::firstWhere('slug', $slug)->delete();

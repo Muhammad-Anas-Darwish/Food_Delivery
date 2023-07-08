@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\FoodCart;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -18,10 +19,7 @@ class FoodCartController extends Controller
         $user = Auth::user();
 
         // Get the last cart for the user
-        $cart = Cart::firstWhere(['user_id' => $user['id'], 'been_ordered' => false]);
-
-        if (!$cart)
-            return response()->json(['error' => "There is no cart!"], 404);
+        $cart = Cart::firstOrCreate(['user_id' => $user['id'], 'been_ordered' => false]);
 
         // Get all food items in the last cart and their quantities
         $food_cart_items = FoodCart::where('cart_id', $cart->id)->with('food')->get();
@@ -47,10 +45,7 @@ class FoodCartController extends Controller
         $user = Auth::user();
 
         // Get the last cart for the user
-        $cart = Cart::firstWhere(['user_id' => $user['id'], 'been_ordered' => false]);
-
-        if (!$cart)
-            return response()->json(['error' => "There is no cart!"], 404);
+        $cart = Cart::firstOrCreate(['user_id' => $user['id'], 'been_ordered' => false]);
 
         // Get food item in the last cart and their quantitiy
         $food_cart_item = FoodCart::where(['cart_id' => $cart->id, 'food_id' => $request['food_id']])->first();
@@ -83,13 +78,15 @@ class FoodCartController extends Controller
         }
 
         $user = Auth::user();
-        $cart = Cart::firstWhere(['user_id' => $user['id'], 'been_ordered' => false]);
-
-        if (!$cart)
-            return response()->json(['error' => "There is no cart!"], 404);
+        $cart = Cart::firstOrCreate(['user_id' => $user['id'], 'been_ordered' => false]);
 
         // Get food item in the last cart and their quantitiy
         $food_cart_item = FoodCart::where(['cart_id' => $cart->id, 'id' => $id])->first();
+
+        if ($food_cart_item == null) {
+            return response()->json(['error' => 'Food Cart not found'], Response::HTTP_NOT_FOUND);
+        }
+
         $food_cart_item['quantity'] += $request['quantity'];
 
         if ($food_cart_item['quantity'] <= 0) { // if quantity is negative delete food_cart_item
@@ -108,14 +105,17 @@ class FoodCartController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
-        $cart = Cart::firstWhere(['user_id' => $user['id'], 'been_ordered' => false]);
-
-        if (!$cart)
-            return response()->json(['error' => "There is no cart!"], 404);
+        $cart = Cart::firstOrCreate(['user_id' => $user['id'], 'been_ordered' => false]);
 
         // Get food item in the last cart and their quantitiy
-        $food_cart_item = FoodCart::firstWhere(['id' => $id, 'cart_id' => $cart->id])->delete();
+        $food_cart_item = FoodCart::firstWhere(['id' => $id, 'cart_id' => $cart->id]);
 
-        return response()->json(['message' => 'Food cart deleted successfully', 'data' => $food_cart_item], 202);
+        if ($food_cart_item === null) {
+            return response()->json(['error' => 'Food Cart not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $food_cart_item->delete();
+
+        return response()->json(['message' => 'Food cart deleted successfully'], 202);
     }
 }

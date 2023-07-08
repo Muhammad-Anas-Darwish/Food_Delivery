@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\OrderAddress;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -48,9 +49,14 @@ class OrderAddressController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, $id)
+    public function show($id)
     {
         $address = OrderAddress::find($id);
+
+        if ($address == null) {
+            return response()->json(['error' => 'Order Address not found'], Response::HTTP_NOT_FOUND);
+        }
+
         return response(['data' => $address], 200);
     }
 }

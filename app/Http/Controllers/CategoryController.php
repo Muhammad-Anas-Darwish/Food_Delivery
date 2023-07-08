@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -77,7 +78,7 @@ class CategoryController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return response()->json(['error' => $validator->errors()], Response::HTTP_NOT_FOUND);
         }
 
         $category = Category::firstWhere('slug', $slug);
@@ -97,7 +98,7 @@ class CategoryController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return response()->json(['error' => $validator->errors()], Response::HTTP_NOT_FOUND);
         }
 
         $category = Category::firstWhere('slug', $slug)->delete();
