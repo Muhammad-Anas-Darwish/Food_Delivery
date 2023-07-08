@@ -14,7 +14,9 @@ class OrderAddressController extends Controller
      */
     public function index()
     {
-        //
+        $addresses = OrderAddress::paginate(24);
+
+        return response()->json($addresses, 200);
     }
 
     /**
@@ -46,8 +48,9 @@ class OrderAddressController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(OrderAddress $orderAddress)
+    public function show(Request $request, $id)
     {
-        //
+        $address = OrderAddress::find($id);
+        return response(['data' => $address], 200);
     }
 }

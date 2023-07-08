@@ -96,13 +96,16 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 // Order Address routes
 Route::group(['middleware' => 'auth:api'], function() {
-    // Route::get('/order_addresses/{slug}', [OrderAddressController::class, 'show']);
     Route::post('/order_addresses', [OrderAddressController::class, 'store']);
 });
 
-// Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
-//     Route::get('/order_addresses', [OrderAddressController::class, 'index']);
-// });
+Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
+    Route::get('/order_addresses', [OrderAddressController::class, 'index']);
+});
+
+Route::group(['middleware' => ['auth:api', 'can.access.order_address']], function() {
+    Route::get('/order_addresses/{id}', [OrderAddressController::class, 'show']);
+});
 
 // Order routes
 Route::group(['middleware' => 'auth:api'], function() {
