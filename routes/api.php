@@ -1,18 +1,19 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\GoogleLoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PayPalController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FoodCartController;
 use App\Http\Controllers\OrderAddressController;
-use App\Http\Controllers\PayPalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,11 +99,9 @@ Route::group(['middleware' => 'auth:api'], function() {
 Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/order_addresses', [OrderAddressController::class, 'store']);
 });
-
 Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
     Route::get('/order_addresses', [OrderAddressController::class, 'index']);
 });
-
 Route::group(['middleware' => ['auth:api', 'can.access.order_address']], function() {
     Route::get('/order_addresses/{id}', [OrderAddressController::class, 'show']);
 });
@@ -111,7 +110,6 @@ Route::group(['middleware' => ['auth:api', 'can.access.order_address']], functio
 Route::group(['middleware' => 'auth:api'], function() {
     Route::get('/orders', [OrderController::class, 'getOrders']);
 });
-
 Route::group(['middleware' => 'admin', 'middleware' => 'auth:api'], function() {
     Route::get('/orders', [OrderController::class, 'index']);
     Route::put('/orders/{id}', [OrderController::class, 'update']);
@@ -124,4 +122,12 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('process-transaction', [PayPalController::class, 'processTransaction'])->name('processTransaction');
     Route::get('success-transaction', [PayPalController::class, 'successTransaction'])->name('successTransaction');
     Route::get('cancel-transaction', [PayPalController::class, 'cancelTransaction'])->name('cancelTransaction');
+});
+
+/**
+ * Google Sign-in Routes
+ */
+Route::group(['middleware' => 'web'], function() {
+    Route::get('auth/google', [GoogleLoginController::class, 'redirectToGoogle'])->name('google.auth');
+    Route::get('auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])->name('google.auth.callback');
 });

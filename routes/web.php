@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GoogleLogin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PayPalController;
 
@@ -28,3 +29,6 @@ Route::group(['middleware' => 'auth:api'], function() {
     })->name('createTransaction');
 });
 
+Route::get('google',function () {
+    return view('googleAuth');
+});
