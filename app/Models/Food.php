@@ -16,6 +16,7 @@ class Food extends Model
     protected $fillable = ['title', 'price', 'is_active', 'description', 'category_id', 'image'];
     protected $with = ['category'];
     public $table = 'foods';
+    protected $appends = ['image_url'];
 
     /**
      * Return the sluggable configuration array for this model.
@@ -35,5 +36,13 @@ class Food extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * Return image url for this model.
+     */
+    public function getImageUrlAttribute()
+    {
+        return ($this->image === "") ? "" : url('images', $this->image);
     }
 }

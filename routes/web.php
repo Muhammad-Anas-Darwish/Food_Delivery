@@ -29,6 +29,16 @@ Route::group(['middleware' => 'auth:api'], function() {
     })->name('createTransaction');
 });
 
+/**
+ * Google Routes
+ */
 Route::get('google',function () {
     return view('googleAuth');
+});
+
+/**
+ * Food Store Routes
+ */
+Route::get('food/store',function () {
+    return view('food');
 });
